@@ -1,6 +1,19 @@
 # Open Sovereign AI Cloud - Unified Helm Values
 # This values file configures all OSAC components via the umbrella chart.
 
+# Per-service enablement flags
+# All default to true for backward compatibility
+global:
+  services:
+    caas:
+      enabled: true
+    vmaas:
+      enabled: true
+    bmaas:
+      enabled: true
+    maas:
+      enabled: true
+
 cliImage: quay.io/openshift/origin-cli:4.20.0
 
 # Shared PostgreSQL host for the db-init hook.

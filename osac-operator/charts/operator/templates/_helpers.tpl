@@ -68,3 +68,54 @@ Service account name
 {{- include "osac-operator.fullname" . }}
 {{- end }}
 {{- end }}
+
+{{/*
+Enable clusterOrder controller based on global.services.caas.enabled or local override
+*/}}
+{{- define "osac-operator.controller.clusterOrder" -}}
+{{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
+{{- .Values.controllers.clusterOrder -}}
+{{- else -}}
+{{- $caasEnabled := false -}}
+{{- if .Values.global.services -}}
+{{- if .Values.global.services.caas -}}
+{{- $caasEnabled = .Values.global.services.caas.enabled | default true -}}
+{{- end -}}
+{{- end -}}
+{{- $caasEnabled -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Enable computeInstance controller based on global.services.vmaas.enabled or local override
+*/}}
+{{- define "osac-operator.controller.computeInstance" -}}
+{{- if .Values.controllers.computeInstance | kindIs "invalid" | not -}}
+{{- .Values.controllers.computeInstance -}}
+{{- else -}}
+{{- $vmaasEnabled := false -}}
+{{- if .Values.global.services -}}
+{{- if .Values.global.services.vmaas -}}
+{{- $vmaasEnabled = .Values.global.services.vmaas.enabled | default true -}}
+{{- end -}}
+{{- end -}}
+{{- $vmaasEnabled -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Enable bareMetalInstance controller based on global.services.bmaas.enabled or local override
+*/}}
+{{- define "osac-operator.controller.bareMetalInstance" -}}
+{{- if .Values.controllers.bareMetalInstance | kindIs "invalid" | not -}}
+{{- .Values.controllers.bareMetalInstance -}}
+{{- else -}}
+{{- $bmaasEnabled := false -}}
+{{- if .Values.global.services -}}
+{{- if .Values.global.services.bmaas -}}
+{{- $bmaasEnabled = .Values.global.services.bmaas.enabled | default true -}}
+{{- end -}}
+{{- end -}}
+{{- $bmaasEnabled -}}
+{{- end -}}
+{{- end }}
