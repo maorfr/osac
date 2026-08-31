@@ -38,16 +38,24 @@ global:
 {{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
 {{- .Values.controllers.clusterOrder -}}
 {{- else -}}
-{{- $caasEnabled := false -}}
+{{- $caasEnabled := true -}}
 {{- if .Values.global.services -}}
 {{- if .Values.global.services.caas -}}
-{{- $caasEnabled = .Values.global.services.caas.enabled | default true -}}
+{{- if hasKey .Values.global.services.caas "enabled" -}}
+{{- $caasEnabled = .Values.global.services.caas.enabled -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- $caasEnabled -}}
 {{- end -}}
 {{- end }}
 ```
+
+**Key implementation details:**
+- Initialize fallback to `true` (backward compatibility)
+- Use `hasKey` to check if `enabled` key exists (preserves explicit `false` values)
+- Never use `| default true` pattern (treats `false` as falsy)
+- Subchart `values.yaml` must not define defaults for computed controllers
 
 **templates/deployment.yaml**: Uses the helper instead of reading `.Values` directly:
 

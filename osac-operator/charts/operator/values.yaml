@@ -25,11 +25,14 @@ fulfillment:
   tokenFile: ""
 
 controllers:
-  clusterOrder: true
-  computeInstance: true
+  # clusterOrder, computeInstance, and bareMetalInstance are computed from
+  # global.services.*.enabled by default (see _helpers.tpl). Set explicitly
+  # to override the computed value.
+  # clusterOrder: true
+  # computeInstance: true
+  # bareMetalInstance: true
   tenant: true
   networking: true
-  bareMetalInstance: true
   storage: true
   # The Volume controller provisions volumes via the vendor CSI controllers.
   # Safe to leave enabled even without a vendor backend: when vendorControllers

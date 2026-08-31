@@ -4,6 +4,62 @@
   "description": "Configuration values for Open Sovereign AI Cloud deployment",
   "type": "object",
   "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global configuration values shared across all subcharts",
+      "properties": {
+        "services": {
+          "type": "object",
+          "description": "Per-service enablement flags (CaaS, VMaaS, BMaaS, MaaS)",
+          "properties": {
+            "caas": {
+              "type": "object",
+              "description": "CaaS (Cluster as a Service) enablement",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable CaaS service (ClusterOrder controller and API endpoints)",
+                  "default": true
+                }
+              }
+            },
+            "vmaas": {
+              "type": "object",
+              "description": "VMaaS (VM as a Service) enablement",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable VMaaS service (ComputeInstance controller and API endpoints)",
+                  "default": true
+                }
+              }
+            },
+            "bmaas": {
+              "type": "object",
+              "description": "BMaaS (Bare Metal as a Service) enablement",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable BMaaS service (BareMetalInstance controller and API endpoints)",
+                  "default": true
+                }
+              }
+            },
+            "maas": {
+              "type": "object",
+              "description": "MaaS (Model as a Service) enablement",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable MaaS service (future: model serving API endpoints)",
+                  "default": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "cliImage": {
       "type": "string",
       "description": "Default OpenShift CLI image used by hook jobs"

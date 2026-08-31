@@ -76,10 +76,12 @@ Enable clusterOrder controller based on global.services.caas.enabled or local ov
 {{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
 {{- .Values.controllers.clusterOrder -}}
 {{- else -}}
-{{- $caasEnabled := false -}}
+{{- $caasEnabled := true -}}
 {{- if .Values.global.services -}}
 {{- if .Values.global.services.caas -}}
-{{- $caasEnabled = .Values.global.services.caas.enabled | default true -}}
+{{- if hasKey .Values.global.services.caas "enabled" -}}
+{{- $caasEnabled = .Values.global.services.caas.enabled -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- $caasEnabled -}}
@@ -93,10 +95,12 @@ Enable computeInstance controller based on global.services.vmaas.enabled or loca
 {{- if .Values.controllers.computeInstance | kindIs "invalid" | not -}}
 {{- .Values.controllers.computeInstance -}}
 {{- else -}}
-{{- $vmaasEnabled := false -}}
+{{- $vmaasEnabled := true -}}
 {{- if .Values.global.services -}}
 {{- if .Values.global.services.vmaas -}}
-{{- $vmaasEnabled = .Values.global.services.vmaas.enabled | default true -}}
+{{- if hasKey .Values.global.services.vmaas "enabled" -}}
+{{- $vmaasEnabled = .Values.global.services.vmaas.enabled -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- $vmaasEnabled -}}
@@ -110,10 +114,12 @@ Enable bareMetalInstance controller based on global.services.bmaas.enabled or lo
 {{- if .Values.controllers.bareMetalInstance | kindIs "invalid" | not -}}
 {{- .Values.controllers.bareMetalInstance -}}
 {{- else -}}
-{{- $bmaasEnabled := false -}}
+{{- $bmaasEnabled := true -}}
 {{- if .Values.global.services -}}
 {{- if .Values.global.services.bmaas -}}
-{{- $bmaasEnabled = .Values.global.services.bmaas.enabled | default true -}}
+{{- if hasKey .Values.global.services.bmaas "enabled" -}}
+{{- $bmaasEnabled = .Values.global.services.bmaas.enabled -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- $bmaasEnabled -}}
