@@ -55,7 +55,8 @@ global:
 - Initialize fallback to `true` (backward compatibility)
 - Use `hasKey` to check if `enabled` key exists (preserves explicit `false` values)
 - Never use `| default true` pattern (treats `false` as falsy)
-- Subchart `values.yaml` must not define defaults for computed controllers
+- **Both** subchart and parent chart `values.yaml` must not define defaults for computed properties
+  (otherwise Helm merges them and the helpers never reach the `global` computation branch)
 
 **templates/deployment.yaml**: Uses the helper instead of reading `.Values` directly:
 

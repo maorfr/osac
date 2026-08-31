@@ -56,11 +56,14 @@ operator:
     serverAddress: "fulfillment-internal-api:8001"
     tokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
   controllers:
-    clusterOrder: true
-    computeInstance: true
+    # clusterOrder, computeInstance, and bareMetalInstance are computed from
+    # global.services.*.enabled by default (see operator subchart _helpers.tpl).
+    # Set explicitly here to override the computed value.
+    # clusterOrder: true
+    # computeInstance: true
+    # bareMetalInstance: true
     tenant: true
     networking: true
-    bareMetalInstance: true
     storage: true
   configSecret:
     name: "osac-config"

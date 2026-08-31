@@ -70,7 +70,8 @@ Service account name
 {{- end }}
 
 {{/*
-Enable clusterOrder controller based on global.services.caas.enabled or local override
+Enable clusterOrder controller based on global.services.caas.enabled or local override.
+Honors explicit local value if set, otherwise computes from global.services.caas.enabled.
 */}}
 {{- define "osac-operator.controller.clusterOrder" -}}
 {{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
@@ -91,7 +92,8 @@ Enable clusterOrder controller based on global.services.caas.enabled or local ov
 {{- end }}
 
 {{/*
-Enable computeInstance controller based on global.services.vmaas.enabled or local override
+Enable computeInstance controller based on global.services.vmaas.enabled or local override.
+Honors explicit local value if set, otherwise computes from global.services.vmaas.enabled.
 */}}
 {{- define "osac-operator.controller.computeInstance" -}}
 {{- if .Values.controllers.computeInstance | kindIs "invalid" | not -}}
@@ -112,7 +114,8 @@ Enable computeInstance controller based on global.services.vmaas.enabled or loca
 {{- end }}
 
 {{/*
-Enable bareMetalInstance controller based on global.services.bmaas.enabled or local override
+Enable bareMetalInstance controller based on global.services.bmaas.enabled or local override.
+Honors explicit local value if set, otherwise computes from global.services.bmaas.enabled.
 */}}
 {{- define "osac-operator.controller.bareMetalInstance" -}}
 {{- if .Values.controllers.bareMetalInstance | kindIs "invalid" | not -}}

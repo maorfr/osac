@@ -33,6 +33,8 @@ operator:
     serverAddress: "fulfillment-internal-api:8001"
     tokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
   controllers:
+    clusterOrder: false
+    computeInstance: true
     tenant: true
     networking: true
     storage: true
