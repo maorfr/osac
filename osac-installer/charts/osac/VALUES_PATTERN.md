@@ -14,7 +14,7 @@ Subcharts contain template helpers that compute their configuration from high-le
 
 ### Parent Chart (`osac-installer/charts/osac`)
 
-**values.yaml**: Defines high-level properties under `global`:
+**values.yaml**: Defines high-level properties under `global` (example showing selective enablement):
 
 ```yaml
 global:
@@ -24,10 +24,12 @@ global:
     vmaas:
       enabled: true
     bmaas:
-      enabled: false
+      enabled: true
     maas:
-      enabled: false
+      enabled: true
 ```
+
+**Default behavior**: All four services default to `enabled: true` for backward compatibility. Set to `false` to disable specific services.
 
 ### Subchart (`osac-operator/charts/operator`)
 
@@ -39,10 +41,12 @@ global:
 {{- .Values.controllers.clusterOrder -}}
 {{- else -}}
 {{- $caasEnabled := true -}}
+{{- if .Values.global -}}
 {{- if .Values.global.services -}}
 {{- if .Values.global.services.caas -}}
 {{- if hasKey .Values.global.services.caas "enabled" -}}
 {{- $caasEnabled = .Values.global.services.caas.enabled -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -53,6 +57,7 @@ global:
 
 **Key implementation details:**
 - Initialize fallback to `true` (backward compatibility)
+- Guard `.Values.global` access with nil check (subchart can be linted standalone)
 - Use `hasKey` to check if `enabled` key exists (preserves explicit `false` values)
 - Never use `| default true` pattern (treats `false` as falsy)
 - **Both** subchart and parent chart `values.yaml` must not define defaults for computed properties
