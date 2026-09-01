@@ -36,26 +36,32 @@ global:
 **templates/_helpers.tpl**: Computes values from `global` with local override support:
 
 ```yaml
-{{- define "osac-operator.controller.clusterOrder" -}}
-{{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
-{{- .Values.controllers.clusterOrder -}}
+{{- define "osac-operator.controllerEnabled" -}}
+{{- $ctx := index . 0 -}}
+{{- $ctrlKey := index . 1 -}}
+{{- $svcKey := index . 2 -}}
+{{- $ctrlVal := index $ctx.Values.controllers $ctrlKey -}}
+{{- if $ctrlVal | kindIs "invalid" | not -}}
+{{- $ctrlVal -}}
 {{- else -}}
-{{- $caasEnabled := true -}}
-{{- if .Values.global -}}
-{{- if .Values.global.services -}}
-{{- if .Values.global.services.caas -}}
-{{- if hasKey .Values.global.services.caas "enabled" -}}
-{{- $caasEnabled = .Values.global.services.caas.enabled -}}
+{{- $enabled := true -}}
+{{- if $ctx.Values.global -}}
+{{- if $ctx.Values.global.services -}}
+{{- $svc := index $ctx.Values.global.services $svcKey -}}
+{{- if $svc -}}
+{{- if hasKey $svc "enabled" -}}
+{{- $enabled = $svc.enabled -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
-{{- $caasEnabled -}}
+{{- $enabled -}}
 {{- end -}}
 {{- end }}
 ```
 
 **Key implementation details:**
+- Takes three parameters: context, controller key, service key (eliminates code duplication)
 - Initialize fallback to `true` (backward compatibility)
 - Guard `.Values.global` access with nil check (subchart can be linted standalone)
 - Use `hasKey` to check if `enabled` key exists (preserves explicit `false` values)
@@ -67,7 +73,11 @@ global:
 
 ```yaml
 - name: OSAC_ENABLE_CLUSTER_CONTROLLER
-  value: {{ include "osac-operator.controller.clusterOrder" . | quote }}
+  value: {{ include "osac-operator.controllerEnabled" (list . "clusterOrder" "caas") | quote }}
+- name: OSAC_ENABLE_COMPUTE_INSTANCE_CONTROLLER
+  value: {{ include "osac-operator.controllerEnabled" (list . "computeInstance" "vmaas") | quote }}
+- name: OSAC_ENABLE_BAREMETAL_INSTANCE_CONTROLLER
+  value: {{ include "osac-operator.controllerEnabled" (list . "bareMetalInstance" "bmaas") | quote }}
 ```
 
 ## User Experience

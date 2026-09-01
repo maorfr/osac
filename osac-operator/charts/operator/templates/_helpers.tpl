@@ -70,67 +70,29 @@ Service account name
 {{- end }}
 
 {{/*
-Enable clusterOrder controller based on global.services.caas.enabled or local override.
-Honors explicit local value if set, otherwise computes from global.services.caas.enabled.
+Enable controller based on global.services.*.enabled or local override.
+Takes three arguments via list: context, controller key, service key.
+Honors explicit local value if set, otherwise computes from global.services.<service>.enabled.
 */}}
-{{- define "osac-operator.controller.clusterOrder" -}}
-{{- if .Values.controllers.clusterOrder | kindIs "invalid" | not -}}
-{{- .Values.controllers.clusterOrder -}}
+{{- define "osac-operator.controllerEnabled" -}}
+{{- $ctx := index . 0 -}}
+{{- $ctrlKey := index . 1 -}}
+{{- $svcKey := index . 2 -}}
+{{- $ctrlVal := index $ctx.Values.controllers $ctrlKey -}}
+{{- if $ctrlVal | kindIs "invalid" | not -}}
+{{- $ctrlVal -}}
 {{- else -}}
-{{- $caasEnabled := true -}}
-{{- if .Values.global -}}
-{{- if .Values.global.services -}}
-{{- if .Values.global.services.caas -}}
-{{- if hasKey .Values.global.services.caas "enabled" -}}
-{{- $caasEnabled = .Values.global.services.caas.enabled -}}
+{{- $enabled := true -}}
+{{- if $ctx.Values.global -}}
+{{- if $ctx.Values.global.services -}}
+{{- $svc := index $ctx.Values.global.services $svcKey -}}
+{{- if $svc -}}
+{{- if hasKey $svc "enabled" -}}
+{{- $enabled = $svc.enabled -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
-{{- $caasEnabled -}}
-{{- end -}}
-{{- end }}
-
-{{/*
-Enable computeInstance controller based on global.services.vmaas.enabled or local override.
-Honors explicit local value if set, otherwise computes from global.services.vmaas.enabled.
-*/}}
-{{- define "osac-operator.controller.computeInstance" -}}
-{{- if .Values.controllers.computeInstance | kindIs "invalid" | not -}}
-{{- .Values.controllers.computeInstance -}}
-{{- else -}}
-{{- $vmaasEnabled := true -}}
-{{- if .Values.global -}}
-{{- if .Values.global.services -}}
-{{- if .Values.global.services.vmaas -}}
-{{- if hasKey .Values.global.services.vmaas "enabled" -}}
-{{- $vmaasEnabled = .Values.global.services.vmaas.enabled -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- $vmaasEnabled -}}
-{{- end -}}
-{{- end }}
-
-{{/*
-Enable bareMetalInstance controller based on global.services.bmaas.enabled or local override.
-Honors explicit local value if set, otherwise computes from global.services.bmaas.enabled.
-*/}}
-{{- define "osac-operator.controller.bareMetalInstance" -}}
-{{- if .Values.controllers.bareMetalInstance | kindIs "invalid" | not -}}
-{{- .Values.controllers.bareMetalInstance -}}
-{{- else -}}
-{{- $bmaasEnabled := true -}}
-{{- if .Values.global -}}
-{{- if .Values.global.services -}}
-{{- if .Values.global.services.bmaas -}}
-{{- if hasKey .Values.global.services.bmaas "enabled" -}}
-{{- $bmaasEnabled = .Values.global.services.bmaas.enabled -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- end -}}
-{{- $bmaasEnabled -}}
+{{- $enabled -}}
 {{- end -}}
 {{- end }}
