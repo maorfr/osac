@@ -1717,5 +1717,104 @@
       }
     }
   },
-  "required": []
+  "required": [],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "global": {
+            "properties": {
+              "services": {
+                "properties": {
+                  "caas": {
+                    "properties": {
+                      "enabled": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "global": {
+            "properties": {
+              "services": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "vmaas": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "bmaas": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "$comment": "CaaS requires at least one of VMaaS or BMaaS to be enabled. CaaS provisions clusters that need compute nodes from either VMaaS or BMaaS."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "global": {
+            "properties": {
+              "services": {
+                "properties": {
+                  "maas": {
+                    "properties": {
+                      "enabled": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "global": {
+            "properties": {
+              "services": {
+                "properties": {
+                  "caas": {
+                    "properties": {
+                      "enabled": {
+                        "const": true
+                      }
+                    },
+                    "$comment": "MaaS requires CaaS to be enabled. MaaS serves models on clusters provisioned by CaaS."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
