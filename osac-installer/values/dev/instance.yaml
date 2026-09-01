@@ -1,5 +1,17 @@
 # OpenShift dev environment -- instance values for osac chart.
 
+# --- Service Enablement ---
+global:
+  services:
+    caas:
+      enabled: true
+    vmaas:
+      enabled: true
+    bmaas:
+      enabled: false
+    maas:
+      enabled: false
+
 # --- Operator ---
 operator:
   image:
